@@ -4,7 +4,7 @@ import Event from "./components/Event";
 export default function Home() {
   return (
     <div>
-      <Event/>
+      <Event event={{title:"Hello", description:"This is the new description"}}/>
     </div>
   );
 }
