@@ -58,7 +58,7 @@ export default function LockedAudioButton() {
       {/* File input */}
       <div className="flex flex-col gap-3">
         <label className="block text-sm font-medium text-gray-700">
-          Select Audio File
+          Select Audio File (.mp3)
         </label>
         <div className="relative">
           <input
