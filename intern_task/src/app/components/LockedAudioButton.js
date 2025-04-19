@@ -1,6 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from 'react';
 import FeedbackForm from './FeedbackForm';
+import { FaPlay, FaPause, FaFileAudio } from 'react-icons/fa';
 
 export default function LockedAudioButton() {
   const audioRef = useRef(null);
@@ -53,30 +54,34 @@ export default function LockedAudioButton() {
   };
 
   return (
-    <div className="mt-4 space-y-4 max-w-md">
+    <div className="space-y-6">
       {/* File input */}
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-3">
         <label className="block text-sm font-medium text-gray-700">
-          Select Audio File (mp3)
+          Select Audio File
         </label>
-        <input
-          type="file"
-          accept="audio/*"
-          onChange={handleFileSelect}
-          className="block w-full text-sm text-gray-500
-            file:mr-4 file:py-2 file:px-4
-            file:rounded-full file:border-0
-            file:text-sm file:font-semibold
-            file:bg-blue-50 file:text-blue-700
-            hover:file:bg-blue-100"
-          disabled={hasPlayed}
-        />
+        <div className="relative">
+          <input
+            type="file"
+            accept="audio/*"
+            onChange={handleFileSelect}
+            className="block w-full text-sm text-gray-500
+              file:mr-4 file:py-2 file:px-4
+              file:rounded-lg file:border-0
+              file:text-sm file:font-semibold
+              file:bg-blue-50 file:text-blue-700
+              hover:file:bg-blue-100
+              file:transition-colors file:duration-200"
+            disabled={hasPlayed}
+          />
+          <FaFileAudio className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        </div>
       </div>
 
       {/* Progress bar */}
-      <div className="h-2 bg-gray-200 rounded-full">
+      <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
         <div 
-          className="h-full bg-blue-500 rounded-full transition-all duration-100"
+          className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-300"
           style={{ width: `${progress}%` }}
         />
       </div>
@@ -85,16 +90,29 @@ export default function LockedAudioButton() {
       <button
         onClick={handlePlay}
         disabled={!audioSource || hasPlayed}
-        className={`px-6 py-3 rounded-lg font-medium transition-colors w-full ${
-          hasPlayed ? "bg-gray-300 cursor-not-allowed" :
-          !audioSource ? "bg-gray-300 cursor-not-allowed" :
-          "bg-blue-500 hover:bg-blue-600 text-white"
-        }`}
+        className={`w-full py-3 px-4 rounded-lg font-medium transition-all duration-300 flex items-center justify-center space-x-2
+          ${hasPlayed ? "bg-gray-100 text-gray-400 cursor-not-allowed" :
+          !audioSource ? "bg-gray-100 text-gray-400 cursor-not-allowed" :
+          "bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-lg hover:shadow-xl"}`}
       >
-        {isLoading ? "Loading..." : 
-         hasPlayed ? "Playback Completed" : 
-         isPlaying ? "Playing..." : 
-         "Play Audio"}
+        {isLoading ? (
+          <div className="flex items-center space-x-2">
+            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            <span>Loading...</span>
+          </div>
+        ) : hasPlayed ? (
+          <span>Playback Completed</span>
+        ) : isPlaying ? (
+          <div className="flex items-center space-x-2">
+            <FaPause className="h-4 w-4" />
+            <span>Playing...</span>
+          </div>
+        ) : (
+          <div className="flex items-center space-x-2">
+            <FaPlay className="h-4 w-4" />
+            <span>Play Audio</span>
+          </div>
+        )}
       </button>
 
       {/* Hidden audio element */}
@@ -112,8 +130,9 @@ export default function LockedAudioButton() {
     
       {/* Feedback Form */}
       {showFeedback && (
-        <div className="mt-6">
-          <FeedbackForm />
+        <div className="mt-8 bg-white rounded-xl shadow-lg p-6">
+          <h3 className="text-xl font-semibold text-gray-800 mb-4">Share Your Experience</h3>
+          <FeedbackForm/>
         </div>
       )}
     </div>
