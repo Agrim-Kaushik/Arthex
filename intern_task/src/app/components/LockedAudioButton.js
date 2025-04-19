@@ -1,6 +1,6 @@
-// src/app/components/LockedAudioButton.js
 "use client";
 import { useState, useRef, useEffect } from 'react';
+import FeedbackForm from './FeedbackForm';
 
 export default function LockedAudioButton() {
   const audioRef = useRef(null);
@@ -9,6 +9,7 @@ export default function LockedAudioButton() {
   const [progress, setProgress] = useState(0);
   const [audioSource, setAudioSource] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
 
   // Handle file selection
   const handleFileSelect = (event) => {
@@ -47,6 +48,7 @@ export default function LockedAudioButton() {
   const handleEnded = () => {
     setIsPlaying(false);
     setHasPlayed(true);
+    setShowFeedback(true);
     URL.revokeObjectURL(audioSource); // Clean up memory
   };
 
@@ -54,8 +56,8 @@ export default function LockedAudioButton() {
     <div className="mt-4 space-y-4 max-w-md">
       {/* File input */}
       <div className="flex flex-col gap-2">
-        <label className="block text-sm font-medium text-white-700">
-          Select Audio (.mp3) File to play
+        <label className="block text-sm font-medium text-gray-700">
+          Select Audio File (mp3)
         </label>
         <input
           type="file"
@@ -106,6 +108,13 @@ export default function LockedAudioButton() {
           <source src={audioSource} type="audio/mpeg" />
           Your browser does not support the audio element.
         </audio>
+      )}
+    
+      {/* Feedback Form */}
+      {showFeedback && (
+        <div className="mt-6">
+          <FeedbackForm />
+        </div>
       )}
     </div>
   );
